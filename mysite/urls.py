@@ -20,5 +20,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #path('url address' , 'view')
     path("" , include("website.urls"))
-
 ]
