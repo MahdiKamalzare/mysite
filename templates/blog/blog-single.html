@@ -36,7 +36,6 @@
 								<!-- {{ post.category.all|join:" , " }} -->
 								{% for cat in post.category.all %}
 								<a href="#" style="color: rgb(134, 134, 134);">{{cat.name}}</a>{% if not forloop.loop%},{% endif %}
-
 								{% endfor %}
 							</ul>
 						</ul>
@@ -230,14 +229,20 @@
 			</div>
 			<div class="col-lg-4 sidebar-widgets">
 				<div class="widget-wrap">
-					<div class="single-sidebar-widget search-widget">
+					{% include 'blog/blog-search.html' %}
+					{% include 'blog/blog-writer.html' %}
+					{% include 'blog/blog-tags.html' %}
+					{% latestposts %}
+					{% include 'blog/blog-ads.html' %}
+				
+					<!-- <div class="single-sidebar-widget search-widget">
 						<form class="search-form" action="#">
 							<input placeholder="Search Posts" name="search" type="text" onfocus="this.placeholder = ''"
 								onblur="this.placeholder = 'Search Posts'">
 							<button type="submit"><i class="fa fa-search"></i></button>
 						</form>
-					</div>
-					{% include 'blog/blog-writer.html' %}
+					</div> -->
+					<!-- {% include 'blog/blog-writer.html' %}
 					<div class="single-sidebar-widget popular-post-widget">
 						<h4 class="popular-title">Popular Posts</h4>
 						<div class="popular-post-list">
@@ -376,7 +381,8 @@
 							<li><a href="#">Adventure</a></li>
 						</ul>
 					</div>
-				</div>
+				</div> -->
+
 			</div>
 		</div>
 	</div>
