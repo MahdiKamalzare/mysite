@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load blog_tags %}
 {% block content %}
 
 <!-- start banner Area -->
@@ -95,7 +96,7 @@
 						<ul class="tags">
 							<!-- {{ post.category.all|join:" , " }} -->
 							{% for cat in post.category.all %}
-								<a href="#" style="color: rgb(134, 134, 134);">{{cat.name}}</a>{% if not forloop.loot %},{% endif %}
+								<a href="{% url 'blog:category' cat_name=cat.name %}" style="color: rgb(134, 134, 134);">{{cat.name}}</a>{% if not forloop.loot %},{% endif %}
 							{% endfor %}
 						</ul>
 						<div class="user-details row">
@@ -251,14 +252,18 @@
 			</div>
 			<div class="col-lg-4 sidebar-widgets">
 				<div class="widget-wrap">
-					<div class="single-sidebar-widget search-widget">
+					<!-- <div class="single-sidebar-widget search-widget">
+
 						<form class="search-form" action="#">
 							<input placeholder="Search Posts" name="search" type="text" onfocus="this.placeholder = ''"
 								onblur="this.placeholder = 'Search Posts'">
 							<button type="submit"><i class="fa fa-search"></i></button>
 						</form>
-					</div>
+					</div> -->
+					{% include 'blog/blog-search.html' %}
 					{% include 'blog/blog-writer.html' %}
+					{% include 'blog/blog-ads.html' %}
+					{% postcategories %}
 					<!-- <div class="single-sidebar-widget popular-post-widget">
 						<h4 class="popular-title">Popular Posts</h4>
 						<div class="popular-post-list">
@@ -308,8 +313,8 @@
 							</div>
 						</div>
 					</div> -->
-					{% include 'blog/blog-ads.html' %}
-					<div class="single-sidebar-widget post-category-widget">
+					
+					<!-- <div class="single-sidebar-widget post-category-widget">
 						<h4 class="category-title">Post Catgories</h4>
 						<ul class="cat-list">
 							<li>
@@ -396,7 +401,7 @@
 							<li><a href="#">Lifestyle</a></li>
 							<li><a href="#">Adventure</a></li>
 						</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
