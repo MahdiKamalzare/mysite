@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'captcha',
     'django_extensions',
     'website.apps.WebsiteConfig',
-    'blog'
+    'blog',
+    'accounts'
 ]
 # sites framework
 SITE_ID = 2
