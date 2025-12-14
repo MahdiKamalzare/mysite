@@ -3,8 +3,10 @@ from blog.models import Post , Comment
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from blog.forms import CommenttForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def blog_view(request , **kwargs):
     posts = Post.objects.filter(status = 1)
     if kwargs.get("cat_name") != None:
