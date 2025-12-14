@@ -1,5 +1,7 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
+
 
 # Create your views here.
 def login_views(request):
@@ -10,11 +12,13 @@ def login_views(request):
         if user is not None:
             login(request , user)
             return redirect("/")
-    if request.user.is_authenticated:
-        msg = f"user is authenticated as {request.user.username}"
-    else:
-        msg = f"user is not authenticated"
-    return render(request , "accounts/login.html" , {"msg":msg})
+    form = AuthenticationForm()
+    context = {"form":form}
+    # if request.user.is_authenticated:
+    #     msg = f"user is authenticated as {request.user.username}"
+    # else:
+    #     msg = f"user is not authenticated"
+    return render(request , "accounts/login.html" , context)
 # def logout_views(request):
 #     return render(request , "accounts/logout.html")
 def signup_views(request):
