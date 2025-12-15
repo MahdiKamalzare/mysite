@@ -1,12 +1,14 @@
-from django.shortcuts import render , get_object_or_404
+from django.shortcuts import render , get_object_or_404 , redirect
 from blog.models import Post , Comment
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from blog.forms import CommenttForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 # Create your views here.
-@login_required
+# @login_required
 def blog_view(request , **kwargs):
     posts = Post.objects.filter(status = 1)
     if kwargs.get("cat_name") != None:
@@ -25,20 +27,66 @@ def blog_view(request , **kwargs):
         posts = posts.get_page(1)
     context = {"posts" : posts}
     return render(request , 'blog/blog-home.html' , context)
+# @login_required(login_url="accounts:login")
+# def blog_single(request , pid):
+#     if request.method == "POST":
+#         form = CommenttForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.add_message(request , messages.SUCCESS , "your comment submited successfully")
+#         else:
+#             messages.add_message(request , messages.ERROR , "your comment did not submited")      
+#     posts = Post.objects.filter(status = 1)
+#     post = get_object_or_404(posts , pk = pid)
+#     if not post.login_require:
+#         comments = Comment.objects.filter(post=post.id , approved = True)
+#         form = CommenttForm()
+#         context = {"post" : post , "comments" : comments , "form" : form}
+#         return render(request , 'blog/blog-single.html' , context)
+#     else:
+#         return HttpResponseRedirect(reverse("accounts:login"))
 def blog_single(request , pid):
+    posts = Post.objects.filter(status=1)
+    post = get_object_or_404(posts, pk=pid)
+    if post.login_require:
+        if not request.user.is_authenticated:
+            from django.utils.http import urlencode
+            from django.shortcuts import redirect, reverse
+            login_url = reverse("accounts:login")
+            params = urlencode({"next": request.path})
+            return redirect(f"{login_url}?{params}")
     if request.method == "POST":
         form = CommenttForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.add_message(request , messages.SUCCESS , "your comment submited successfully")
+            messages.success(request, "Your comment submitted successfully")
         else:
-            messages.add_message(request , messages.ERROR , "your comment did not submited")      
-    posts = Post.objects.filter(status = 1)
-    post = get_object_or_404(posts , pk = pid)
-    comments = Comment.objects.filter(post=post.id , approved = True)
+            messages.error(request, "Your comment did not submit")
+
+    comments = Comment.objects.filter(post=post.id, approved=True)
     form = CommenttForm()
-    context = {"post" : post , "comments" : comments , "form" : form}
-    return render(request , 'blog/blog-single.html' , context)
+    context = {"post": post, "comments": comments, "form": form}
+    return render(request, 'blog/blog-single.html', context)
+
+# @login_required(login_url="accounts:login")
+# def blog_single(request , pid):
+#     posts = Post.objects.filter(status=1)
+#     post = get_object_or_404(posts, pk=pid)
+
+#     if request.method == "POST":
+#         form = CommenttForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Your comment submitted successfully")
+#         else:
+#             messages.error(request, "Your comment did not submit")
+
+#     comments = Comment.objects.filter(post=post.id, approved=True)
+#     form = CommenttForm()
+#     context = {"post": post, "comments": comments, "form": form}
+#     return render(request, 'blog/blog-single.html', context)
+
+
 def test(request):
     return render(request , "test.html")
 def blog_category(request , cat_name):
